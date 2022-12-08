@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
+    <title>TODO List</title>
+</head>
+
+<body>
+    {% if form %}
+    <form action="/add" method="post">
+        <a href="/" class="go-back">&cross;</a>
+        <h2>Add/Update Task</h2>
+        <input name="sno" type="text" placeholder="sno" hidden value="{{sno}}">
+        <input name="task" type="text" placeholder="Task" value="{{task}}">
+        <select name="status" id="status">
+            {% if status == "0" %}
+            <option value="0" disabled selected>Select Status</option>
+            {% else %}
+            <option value="0" disabled>Select Status</option>
+            {% endif %}
+            {% if status == "1" %}
+            <option value="1" selected>Todo</option>
+            {% else %}
+            <option value="1">Todo</option>
+            {% endif %}
+            {% if status == "2" %}
+            <option value="2" selected>In Progress</option>
+            {% else %}
+            <option value="2">In Progress</option>
+            {% endif %}
+            {% if status == "3" %}
+            <option value="3" selected>Completed</option>
+            {% else %}
+            <option value="3">Completed</option>
+            {% endif %}
+            <!-- <option value="1">Todo</option>
+            <option value="2">In Progress</option>
+            <option value="3">Completed</option> -->
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+    {% endif %}
+    <div class="container">
+        <h1>TODO List</h1>
+        <p>Do it now</p>
+        <a href="/add"><div><button class="add">Add task</button></div></a>
+        <table>
+            <tr>
+                <th class="1">#</th>
+                <th class="2">Task name</th>
+                <th class="3">Status</th>
+                <th class="4">Edit</th>
+                <th class="5">Remove</th>
+            </tr>
+            {% for row in csvreader %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{row[1]}}</td>
+                {% if row[2] == "1" %}
+                <td><span class="status status-todo">Todo</span></td>
+                {% elif row[2] == "2" %}
+                <td><span class="status status-progress">In Progress</span></td>
+                {% elif row[2] == "3" %}
+                <td><span class="status status-completed">Completed</span></td>
+                {% endif %}
+                <td><a href="/edit/{{row[0]}}"><div><img src="{{url_for('static', filename='img/edit-button.jpg')}}" alt="" width="22px"></div></a></td>
+                <td><a href="/delete/{{row[0]}}"><div><img src="{{url_for('static', filename='img/delete-button.png')}}" alt="" width="22px"></div></a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+
+</html>
